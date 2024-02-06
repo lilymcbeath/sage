@@ -1824,21 +1824,46 @@ class ModularAbelianVariety_abstract(Parent):
         return prod(f.level() ** f.base_ring().degree()
                     for f in self.newform_decomposition('a'))
 
-    def rank(self):
+    def lattice_rank(self):
         """
         Return the rank of the underlying lattice of self.
 
         EXAMPLES::
 
             sage: J = J0(33)
-            sage: J.rank()
+            sage: J.lattice_rank()
             6
             sage: J[1]
             Simple abelian subvariety 11a(3,33) of dimension 1 of J0(33)
-            sage: (J[1] * J[1]).rank()
+            sage: (J[1] * J[1]).lattice_rank()
             4
+
+            sage: for E in J0(37).decomposition(): print(E.lattice_rank())
+            2
+            2
         """
         return self.lattice().rank()
+
+    def rank(self):
+        """
+        Return the Mordell-Weil rank of self if self.dimension() == 1.
+        Not implemented for self.dimension() != 1.
+
+        EXAMPLES::
+
+            sage: for E in J0(37).decomposition(): print(E.rank())
+            1
+            0
+
+            sage: J0(37).rank()
+            Traceback (most recent call last):
+            ...
+            NotImplementedError: only implemented for modular abelian varieties of dimension 1
+        """
+        if self.dimension() != 1:
+            raise NotImplementedError("only implemented for modular abelian varieties of dimension 1")
+        else:
+            return self.elliptic_curve().rank()
 
     def degree(self):
         """
