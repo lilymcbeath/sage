@@ -1824,45 +1824,47 @@ class ModularAbelianVariety_abstract(Parent):
         return prod(f.level() ** f.base_ring().degree()
                     for f in self.newform_decomposition('a'))
 
-    def lattice_rank(self):
+    def rank(self, rank_type='lattice'):
         """
-        Return the rank of the underlying lattice of self.
+        Return the rank of the underlying lattice of self by default.
+        If rank_type is specified as 'mordell-weil' and dimension of modular abelian variety is 1, then return the Mordell-Weil rank.
+
+        INPUT:
+
+        - ``rank_type`` -- (default: ``'lattice'``) the definition of rank, which is either the rank of the underlying lattice of self or the Mordell-Weil rank of self if self is an elliptic curve
+
+        OUTPUT:
+
+        The rank of the modular abelian variety, as defined in the input.
 
         EXAMPLES::
 
             sage: J = J0(33)
-            sage: J.lattice_rank()
+            sage: J.rank()
             6
             sage: J[1]
             Simple abelian subvariety 11a(3,33) of dimension 1 of J0(33)
-            sage: (J[1] * J[1]).lattice_rank()
+            sage: (J[1] * J[1]).rank()
             4
 
-            sage: for E in J0(37).decomposition(): print(E.lattice_rank())
-            2
-            2
-        """
-        return self.lattice().rank()
+        TESTS:
 
-    def rank(self):
-        """
-        Return the Mordell-Weil rank of self if self.dimension() == 1.
-        Not implemented for self.dimension() != 1.
-
-        EXAMPLES::
+        This addresses the example at :issue:`31934`::
 
             sage: for E in J0(37).decomposition(): print(E.rank())
+            2
+            2
+            sage: for E in J0(37).decomposition(): print(E.rank(rank_type='mordell_weil'))
             1
             0
-
-            sage: J0(37).rank()
-            Traceback (most recent call last):
-            ...
-            NotImplementedError: only implemented for modular abelian varieties of dimension 1
         """
-        if self.dimension() != 1:
-            raise NotImplementedError("only implemented for modular abelian varieties of dimension 1")
-        else:
+        if rank_type not in ['lattice','mordell_weil']:
+            raise ValueError("rank_type must be 'lattice' or 'mordell_weil', not {0}".format(rank_type))
+        if rank_type == 'mordell_weil' and self.dimension() != 1:
+            raise NotImplementedError("Mordell Weil rank is only implemented for modular abelian varieties of dimension 1")
+        if rank_type == 'lattice':
+            return self.lattice().rank()
+        if rank_type == 'mordell_weil' and self.dimension() == 1:
             return self.elliptic_curve().rank()
 
     def degree(self):
