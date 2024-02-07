@@ -1827,7 +1827,7 @@ class ModularAbelianVariety_abstract(Parent):
     def rank(self, rank_type='lattice'):
         """
         Return the rank of the underlying lattice of self by default.
-        If rank_type is specified as 'mordell-weil' and dimension of modular abelian variety is 1, then return the Mordell-Weil rank.
+        The rank_type must be either 'lattice' or 'mordell_weil'. If rank_type is specified as 'mordell_weil' and the dimension of the modular abelian variety is 1, return the Mordell-Weil rank. The Mordell-Weil rank is not implemented for dimension not equal to 1.
 
         INPUT:
 
@@ -1844,8 +1844,10 @@ class ModularAbelianVariety_abstract(Parent):
             6
             sage: J[1]
             Simple abelian subvariety 11a(3,33) of dimension 1 of J0(33)
-            sage: (J[1] * J[1]).rank()
-            4
+            sage: J[1].rank()
+            2
+            sage: J[1].rank(rank_type='mordell_weil')
+            0
 
         TESTS:
 
