@@ -617,12 +617,30 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
           To:   Projective Plane Curve over Rational Field defined by x^3 + y^3 - 7*z^3
           Defn: Defined on coordinates by sending (x : y : z) to
                 (-1/504*y + 1/2*z : 1/504*y + 1/2*z : 1/84*x)
+
+    Check that this is an abelian group, for :trac:'16184'::
+
+        sage: x = polygen(ZZ, 'x')
+        sage: K.<a> = NumberField(x^2 + x - (3^3-3))
+        sage: E = EllipticCurve('37a')
+        sage: X = E(K)
+        sage: X
+        Abelian group of points on
+         Elliptic Curve defined by y^2 + y = x^3 + (-1)*x
+          over Number Field in a with defining polynomial x^2 + x - 24
+        sage: from sage.groups.group import is_Group
+        sage: is_Group(X)
+        True
+        sage: X.is_abelian()
+        True
     """
     def order(self):
         """
         Return the number of elements of this group.
 
         This is either a positive integer or infinity.
+
+        For an abelian variety, the order is not implemented.
 
         EXAMPLES::
 
@@ -645,6 +663,8 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
         """
         Returns True if this group is finite.
 
+        For an abelian variety, is_finite is not implemented.
+
         EXAMPLES::
 
             sage: from sage.groups.group import Group
@@ -662,6 +682,8 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
 
         A group is trivial, if it consists only of the identity
         element.
+
+        For an abelian variety, is_trivial is not implemented.
 
         .. WARNING::
 
@@ -707,7 +729,7 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
 
     def _an_element_(self):
         """
-        Return an element
+        Return an element (not implemented for abelian varieties)
 
         OUTPUT:
 
@@ -724,6 +746,8 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
     def quotient(self, H, **kwds):
         """
         Return the quotient of this group by the normal subgroup `H`.
+
+        The quotient is not implemented for abelian varieties.
 
         EXAMPLES::
 
