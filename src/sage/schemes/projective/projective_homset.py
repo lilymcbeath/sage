@@ -764,7 +764,9 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
             sage: X._element_constructor_([0,1,0])                                      # needs sage.schemes
             (0 : 1 : 0)
         """
-        raise NotImplementedError
+        if len(v) == 1:
+            v = v[0]
+        return self.codomain()._point(self.extended_codomain(), v, **kwds)
 
     def _repr_(self):
         """
