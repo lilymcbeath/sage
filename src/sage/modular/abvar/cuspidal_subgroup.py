@@ -46,7 +46,7 @@ rational cusps.
 This might not give us the exact rational torsion subgroup, since
 it might be bigger than order `81`::
 
-    sage: J0(54).rational_torsion_subgroup().multiple_of_order()
+    sage: J0(54).torsion_subgroup().multiple_of_order()
     243
 
 TESTS::

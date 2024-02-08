@@ -1650,7 +1650,7 @@ class ModularAbelianVariety_abstract(Parent):
             Simple abelian subvariety 11a(1,33) of dimension 1 of J0(33)
             sage: A.is_subvariety_of_ambient_jacobian()
             True
-            sage: B, phi = A / A.torsion_subgroup(2)
+            sage: B, phi = A / A.n_torsion_subgroup(2)
             sage: B
             Abelian variety factor of dimension 1 of J0(33)
             sage: phi.matrix()
@@ -2299,12 +2299,12 @@ class ModularAbelianVariety_abstract(Parent):
 
         EXAMPLES::
 
-            sage: J0(11).rational_torsion_subgroup().order()
+            sage: J0(11).torsion_subgroup().order()
             5
             sage: J0(11).rational_torsion_order()
             5
         """
-        return self.rational_torsion_subgroup().order(proof=proof)
+        return self.torsion_subgroup().order(proof=proof)
 
     def number_of_rational_points(self):
         """
@@ -2345,7 +2345,7 @@ class ModularAbelianVariety_abstract(Parent):
         if positive_rank:
             return infinity
         else:
-            return self.rational_torsion_subgroup().order()
+            return self.torsion_subgroup().order()
 
     def frobenius_polynomial(self, p, var='x'):
         """
@@ -2798,7 +2798,7 @@ class ModularAbelianVariety_abstract(Parent):
             self.__qbar_torsion_subgroup = G
             return G
 
-    def rational_torsion_subgroup(self):
+    def torsion_subgroup(self):
         """
         Return the maximal torsion subgroup of self defined over QQ.
 
@@ -2808,7 +2808,7 @@ class ModularAbelianVariety_abstract(Parent):
             sage: A = J.new_subvariety()
             sage: A
             Abelian subvariety of dimension 1 of J0(33)
-            sage: t = A.rational_torsion_subgroup(); t
+            sage: t = A.torsion_subgroup(); t
             Torsion subgroup of Abelian subvariety of dimension 1 of J0(33)
             sage: t.multiple_of_order()
             4
@@ -2818,12 +2818,23 @@ class ModularAbelianVariety_abstract(Parent):
             4
             sage: t.gens()
             [[(1/2, 0, 0, -1/2, 0, 0)], [(0, 0, 1/2, 0, 1/2, -1/2)]]
+
+        TESTS:
+
+        Addressed the comment in :trac:`8777`::
+
+            sage: E=EllipticCurve('11a')
+            sage: E.torsion_subgroup()
+            Torsion Subgroup isomorphic to Z/5 associated to the Elliptic Curve defined by y^2 + y = x^3 - x^2 - 10*x - 20 over Rational Field
+            sage: A=J0(11)
+            sage: A.torsion_subgroup()
+            Torsion subgroup of Abelian variety J0(11) of dimension 1
         """
         try:
-            return self.__rational_torsion_subgroup
+            return self.__torsion_subgroup
         except AttributeError:
             T = RationalTorsionSubgroup(self)
-            self.__rational_torsion_subgroup = T
+            self.__torsion_subgroup = T
             return T
 
     def cuspidal_subgroup(self):
@@ -3141,7 +3152,7 @@ class ModularAbelianVariety_abstract(Parent):
         return FiniteSubgroup_lattice(
             self, X, field_of_definition=field_of_definition, check=check)
 
-    def torsion_subgroup(self, n):
+    def n_torsion_subgroup(self, n):
         """
         If n is an integer, return the subgroup of points of order n.
         Return the `n`-torsion subgroup of elements of order
@@ -3150,31 +3161,41 @@ class ModularAbelianVariety_abstract(Parent):
 
         EXAMPLES::
 
-            sage: J1(13).torsion_subgroup(19)
+            sage: J1(13).n_torsion_subgroup(19)
             Finite subgroup with invariants [19, 19, 19, 19] over QQ of Abelian variety J1(13) of dimension 2
 
         ::
 
             sage: A = J0(23)
-            sage: G = A.torsion_subgroup(5); G
+            sage: G = A.n_torsion_subgroup(5); G
             Finite subgroup with invariants [5, 5, 5, 5] over QQ of Abelian variety J0(23) of dimension 2
             sage: G.order()
             625
             sage: G.gens()
             [[(1/5, 0, 0, 0)], [(0, 1/5, 0, 0)], [(0, 0, 1/5, 0)], [(0, 0, 0, 1/5)]]
             sage: A = J0(23)
-            sage: A.torsion_subgroup(2).order()
+            sage: A.n_torsion_subgroup(2).order()
             16
+
+        TESTS:
+
+        Addressed the comment in :trac:`8777`::
+
+            sage: A=J0(11)
+            sage: A.torsion_subgroup()
+            Torsion subgroup of Abelian variety J0(11) of dimension 1
+            sage: A.n_torsion_subgroup(5)
+            Finite subgroup with invariants [5, 5] over QQ of Abelian variety J0(11) of dimension 1
         """
         try:
-            return self.__torsion_subgroup[n]
+            return self.__n_torsion_subgroup[n]
         except KeyError:
             pass
         except AttributeError:
-            self.__torsion_subgroup = {}
+            self.__n_torsion_subgroup = {}
         lattice = self.lattice().scale(1 / Integer(n))
         H = FiniteSubgroup_lattice(self, lattice, field_of_definition=self.base_field())
-        self.__torsion_subgroup[n] = H
+        self.__n_torsion_subgroup[n] = H
         return H
 
     # #########################################################################

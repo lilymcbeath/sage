@@ -378,7 +378,7 @@ class Morphism_abstract(sage.modules.matrix_morphism.MatrixMorphism_abstract):
         EXAMPLES: We apply morphisms to elements::
 
             sage: t2 = J0(33).hecke_operator(2)
-            sage: G  = J0(33).torsion_subgroup(2); G
+            sage: G  = J0(33).n_torsion_subgroup(2); G
             Finite subgroup with invariants [2, 2, 2, 2, 2, 2] over QQ of Abelian variety J0(33) of dimension 3
             sage: t2(G.0)
             [(-1/2, 0, 1/2, -1/2, 1/2, -1/2)]
@@ -396,7 +396,7 @@ class Morphism_abstract(sage.modules.matrix_morphism.MatrixMorphism_abstract):
         We apply morphisms to subgroups::
 
             sage: t2 = J0(33).hecke_operator(2)
-            sage: G  = J0(33).torsion_subgroup(2); G
+            sage: G  = J0(33).n_torsion_subgroup(2); G
             Finite subgroup with invariants [2, 2, 2, 2, 2, 2] over QQ of Abelian variety J0(33) of dimension 3
             sage: t2(G)
             Finite subgroup with invariants [2, 2] over QQ of Abelian variety J0(33) of dimension 3
@@ -489,7 +489,7 @@ class Morphism_abstract(sage.modules.matrix_morphism.MatrixMorphism_abstract):
         ::
 
             sage: J = J0(37) ; phi = J._isogeny_to_product_of_simples()
-            sage: phi._image_of_element(J.torsion_subgroup(5).gens()[0])
+            sage: phi._image_of_element(J.n_torsion_subgroup(5).gens()[0])
             [(1/5, -1/5, -1/5, 1/5, 1/5, 1/5, 1/5, -1/5)]
 
         ::
@@ -538,9 +538,9 @@ class Morphism_abstract(sage.modules.matrix_morphism.MatrixMorphism_abstract):
             sage: D = t._image_of_finite_subgroup(C); D
             Finite subgroup with invariants [5] over QQ of Abelian variety J0(33) of dimension 3
             sage: phi = J0(11).degeneracy_map(22,2)
-            sage: J0(11).rational_torsion_subgroup().order()
+            sage: J0(11).torsion_subgroup().order()
             5
-            sage: phi._image_of_finite_subgroup(J0(11).rational_torsion_subgroup())
+            sage: phi._image_of_finite_subgroup(J0(11).torsion_subgroup())
             Finite subgroup with invariants [5] over QQ of Abelian variety J0(22) of dimension 2
         """
         B = G._relative_basis_matrix() * self.restrict_domain(G.abelian_variety()).matrix() * self.codomain().lattice().basis_matrix()
