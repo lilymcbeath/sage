@@ -2277,7 +2277,7 @@ class ModularSymbolsSpace(HeckeModule_free_module):
             sage: D = M.decomposition()
             sage: [A.abvarquo_rational_cuspidal_subgroup().invariants() for A in D]
             [(), (5,), (5,)]
-            sage: [A.abelian_variety().rational_torsion_subgroup().multiple_of_order() for A in D]
+            sage: [A.abelian_variety().torsion_subgroup().multiple_of_order() for A in D]
             [1, 5, 5]
         """
         try:
