@@ -47,6 +47,7 @@ from sage.misc.verbose import verbose
 from sage.rings.rational_field import is_RationalField
 from sage.categories.fields import Fields
 from sage.categories.number_fields import NumberFields
+from sage.groups.group import AbelianGroup
 from sage.rings.finite_rings.finite_field_base import FiniteField
 from sage.rings.polynomial.polynomial_ring_constructor import PolynomialRing
 from sage.schemes.generic.algebraic_scheme import AlgebraicScheme_subscheme
@@ -71,6 +72,7 @@ class SchemeHomset_points_projective_field(SchemeHomset_points):
         sage: SchemeHomset_points_projective_field(Spec(QQ), ProjectiveSpace(QQ,2))
         Set of rational points of Projective Space of dimension 2 over Rational Field
     """
+
     def points(self, **kwds):
         """
         Return some or all rational points of a projective scheme.
@@ -569,7 +571,7 @@ class SchemeHomset_polynomial_projective_space(SchemeHomset_generic):
 #  Abelian varieties
 # *******************************************************************
 
-class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_field):
+class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_field, AbelianGroup):
     r"""
     Set of rational points of an Abelian variety.
 
@@ -616,6 +618,123 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
           Defn: Defined on coordinates by sending (x : y : z) to
                 (-1/504*y + 1/2*z : 1/504*y + 1/2*z : 1/84*x)
     """
+    def order(self):
+        """
+        Return the number of elements of this group.
+
+        This is either a positive integer or infinity.
+
+        EXAMPLES::
+
+            sage: from sage.groups.group import Group
+            sage: G = Group()
+            sage: G.order()
+            Traceback (most recent call last):
+            ...
+            NotImplementedError
+
+        TESTS::
+
+            sage: H = SL(2, QQ)                                                         # needs sage.modules
+            sage: H.order()                                                             # needs sage.modules
+            +Infinity
+        """
+        raise NotImplementedError
+
+    def is_finite(self):
+        """
+        Returns True if this group is finite.
+
+        EXAMPLES::
+
+            sage: from sage.groups.group import Group
+            sage: G = Group()
+            sage: G.is_finite()
+            Traceback (most recent call last):
+            ...
+            NotImplementedError
+        """
+        raise NotImplementedError
+
+    def is_trivial(self):
+        r"""
+        Return ``True`` if this group is the trivial group.
+
+        A group is trivial, if it consists only of the identity
+        element.
+
+        .. WARNING::
+
+            It is in principle undecidable whether a group is
+            trivial, for example, if the group is given by a finite
+            presentation.  Thus, this method may not terminate.
+
+        EXAMPLES::
+
+            sage: groups.presentation.Cyclic(1).is_trivial()
+            True
+
+            sage: G.<a,b> = FreeGroup('a, b')
+            sage: H = G / (a^2, b^3, a*b*~a*~b)
+            sage: H.is_trivial()
+            False
+
+        A non-trivial presentation of the trivial group::
+
+            sage: F.<a,b> = FreeGroup()
+            sage: J = F / ((~a)*b*a*(~b)^2, (~b)*a*b*(~a)^2)
+            sage: J.is_trivial()
+            True
+        """
+        raise NotImplementedError
+
+
+    def is_multiplicative(self):
+        r"""
+        Returns True if the group operation is given by \* (rather than
+        +).
+
+        Override for additive groups.
+
+        EXAMPLES::
+
+            sage: from sage.groups.group import Group
+            sage: G = Group()
+            sage: G.is_multiplicative()
+            True
+        """
+        return False
+
+    def _an_element_(self):
+        """
+        Return an element
+
+        OUTPUT:
+
+        An element of the group.
+
+        EXAMPLES::
+
+            sage: G = AbelianGroup([2,3,4,5])                                           # needs sage.modules
+            sage: G.an_element()                                                        # needs sage.modules
+            f0*f1*f2*f3
+        """
+        raise NotImplementedError
+
+    def quotient(self, H, **kwds):
+        """
+        Return the quotient of this group by the normal subgroup `H`.
+
+        EXAMPLES::
+
+            sage: from sage.groups.group import Group
+            sage: G = Group()
+            sage: G.quotient(G)
+            Traceback (most recent call last):
+            ...
+            NotImplementedError
+        """
+        raise NotImplementedError
 
     def _element_constructor_(self, *v, **kwds):
         """
@@ -645,9 +764,7 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
             sage: X._element_constructor_([0,1,0])                                      # needs sage.schemes
             (0 : 1 : 0)
         """
-        if len(v) == 1:
-            v = v[0]
-        return self.codomain()._point(self.extended_codomain(), v, **kwds)
+        raise NotImplementedError
 
     def _repr_(self):
         """
