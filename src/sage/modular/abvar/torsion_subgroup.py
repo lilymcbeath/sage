@@ -19,7 +19,7 @@ EXAMPLES: First we consider `J_0(50)` where everything
 works out nicely::
 
     sage: J = J0(50)
-    sage: T = J.torsion_subgroup(); T
+    sage: T = J.rational_torsion_subgroup(); T
     Torsion subgroup of Abelian variety J0(50) of dimension 2
     sage: T.multiple_of_order()
     15
@@ -34,9 +34,9 @@ works out nicely::
     Simple abelian subvariety 50a(1,50) of dimension 1 of J0(50),
     Simple abelian subvariety 50b(1,50) of dimension 1 of J0(50)
     ]
-    sage: d[0].torsion_subgroup().order()
+    sage: d[0].rational_torsion_subgroup().order()
     3
-    sage: d[1].torsion_subgroup().order()
+    sage: d[1].rational_torsion_subgroup().order()
     5
 
 Next we make a table of the upper and lower bounds for each new
@@ -46,7 +46,7 @@ factor.
 
     sage: for N in range(1,38):
     ....:    for A in J0(N).new_subvariety().decomposition():
-    ....:        T = A.torsion_subgroup()
+    ....:        T = A.rational_torsion_subgroup()
     ....:        print('%-5s%-5s%-5s%-5s'%(N, A.dimension(), T.divisor_of_order(), T.multiple_of_order()))
     11   1    5    5
     14   1    6    6
@@ -74,7 +74,7 @@ factor.
 
 TESTS::
 
-    sage: T = J0(54).torsion_subgroup()
+    sage: T = J0(54).rational_torsion_subgroup()
     sage: loads(dumps(T)) == T
     True
 """
@@ -121,7 +121,7 @@ class RationalTorsionSubgroup(FiniteSubgroup):
 
         EXAMPLES::
 
-            sage: T = J0(14).torsion_subgroup(); T
+            sage: T = J0(14).rational_torsion_subgroup(); T
             Torsion subgroup of Abelian variety J0(14) of dimension 1
             sage: type(T)
             <class 'sage.modular.abvar.torsion_subgroup.RationalTorsionSubgroup_with_category'>
@@ -134,7 +134,7 @@ class RationalTorsionSubgroup(FiniteSubgroup):
 
         EXAMPLES::
 
-            sage: T = J1(13).torsion_subgroup(); T
+            sage: T = J1(13).rational_torsion_subgroup(); T
             Torsion subgroup of Abelian variety J1(13) of dimension 2
             sage: T._repr_()
             'Torsion subgroup of Abelian variety J1(13) of dimension 2'
@@ -155,7 +155,7 @@ class RationalTorsionSubgroup(FiniteSubgroup):
 
         EXAMPLES::
 
-            sage: G = J0(11).torsion_subgroup(); H = J0(13).torsion_subgroup()
+            sage: G = J0(11).rational_torsion_subgroup(); H = J0(13).rational_torsion_subgroup()
             sage: G == G
             True
             sage: G < H   # since 11 < 13
@@ -190,29 +190,29 @@ class RationalTorsionSubgroup(FiniteSubgroup):
         EXAMPLES::
 
             sage: A = J0(11)
-            sage: A.torsion_subgroup().order()
+            sage: A.rational_torsion_subgroup().order()
             5
             sage: A = J0(23)
-            sage: A.torsion_subgroup().order()
+            sage: A.rational_torsion_subgroup().order()
             11
-            sage: T = J0(37)[1].torsion_subgroup()
+            sage: T = J0(37)[1].rational_torsion_subgroup()
             sage: T.order()
             3
 
             sage: J = J1(13)
-            sage: J.torsion_subgroup().order()
+            sage: J.rational_torsion_subgroup().order()
             19
 
         Sometimes the order can only be computed with ``proof=False``. ::
 
             sage: J = J1(23)
-            sage: J.torsion_subgroup().order()
+            sage: J.rational_torsion_subgroup().order()
             Traceback (most recent call last):
             ...
             RuntimeError: Unable to compute order of torsion subgroup
             (it is in [408991, 9406793])
 
-            sage: J.torsion_subgroup().order(proof=False)
+            sage: J.rational_torsion_subgroup().order(proof=False)
             408991
 
         """
@@ -236,7 +236,7 @@ class RationalTorsionSubgroup(FiniteSubgroup):
 
         EXAMPLES::
 
-            sage: J0(11).torsion_subgroup().lattice()
+            sage: J0(11).rational_torsion_subgroup().lattice()
             Free module of degree 2 and rank 2 over Integer Ring
             Echelon basis matrix:
             [  1   0]
@@ -247,7 +247,7 @@ class RationalTorsionSubgroup(FiniteSubgroup):
 
         ::
 
-            sage: T = J0(33).torsion_subgroup()
+            sage: T = J0(33).rational_torsion_subgroup()
             sage: T.lattice()
             Traceback (most recent call last):
             ...
@@ -292,14 +292,14 @@ class RationalTorsionSubgroup(FiniteSubgroup):
 
         EXAMPLES::
 
-            sage: J0(11).torsion_subgroup().possible_orders()
+            sage: J0(11).rational_torsion_subgroup().possible_orders()
             [5]
-            sage: J0(33).torsion_subgroup().possible_orders()
+            sage: J0(33).rational_torsion_subgroup().possible_orders()
             [100, 200]
 
-            sage: J1(13).torsion_subgroup().possible_orders()
+            sage: J1(13).rational_torsion_subgroup().possible_orders()
             [19]
-            sage: J1(16).torsion_subgroup().possible_orders()
+            sage: J1(16).rational_torsion_subgroup().possible_orders()
             [1, 2, 4, 5, 10, 20]
         """
         try:
@@ -353,12 +353,12 @@ class RationalTorsionSubgroup(FiniteSubgroup):
 
         EXAMPLES::
 
-            sage: t = J0(37)[1].torsion_subgroup()
+            sage: t = J0(37)[1].rational_torsion_subgroup()
             sage: t.divisor_of_order()
             3
 
             sage: J = J1(19)
-            sage: J.torsion_subgroup().divisor_of_order()
+            sage: J.rational_torsion_subgroup().divisor_of_order()
             4383
 
             sage: J = J0(45)
@@ -366,7 +366,7 @@ class RationalTorsionSubgroup(FiniteSubgroup):
             32
             sage: J.rational_cuspidal_subgroup().order()
             64
-            sage: J.torsion_subgroup().divisor_of_order()
+            sage: J.rational_torsion_subgroup().divisor_of_order()
             64
         """
         try:
@@ -423,20 +423,20 @@ class RationalTorsionSubgroup(FiniteSubgroup):
 
             sage: J = J1(11); J
             Abelian variety J1(11) of dimension 1
-            sage: J.torsion_subgroup().multiple_of_order()
+            sage: J.rational_torsion_subgroup().multiple_of_order()
             5
 
             sage: J = J0(17)
-            sage: J.torsion_subgroup().order()
+            sage: J.rational_torsion_subgroup().order()
             4
 
         This is an example where proof=False leads to a better bound and better
         performance. ::
 
             sage: J = J1(23)
-            sage: J.torsion_subgroup().multiple_of_order()  # long time (2s)
+            sage: J.rational_torsion_subgroup().multiple_of_order()  # long time (2s)
             9406793
-            sage: J.torsion_subgroup().multiple_of_order(proof=False)
+            sage: J.rational_torsion_subgroup().multiple_of_order(proof=False)
             408991
         """
 
@@ -507,7 +507,7 @@ class RationalTorsionSubgroup(FiniteSubgroup):
         EXAMPLES::
 
             sage: J = J0(11)
-            sage: G = J.torsion_subgroup()
+            sage: G = J.rational_torsion_subgroup()
             sage: G.multiple_of_order_using_frobp(11)
             5
 
@@ -516,7 +516,7 @@ class RationalTorsionSubgroup(FiniteSubgroup):
         primes.  ::
 
             sage: J = J0(389)
-            sage: G = J.torsion_subgroup(); G
+            sage: G = J.rational_torsion_subgroup(); G
             Torsion subgroup of Abelian variety J0(389) of dimension 32
             sage: G.multiple_of_order_using_frobp()
             97
@@ -531,23 +531,23 @@ class RationalTorsionSubgroup(FiniteSubgroup):
         and Gamma1 varieties, and their products. ::
 
             sage: A = J0(11) * J0(33)
-            sage: A.torsion_subgroup().multiple_of_order_using_frobp()
+            sage: A.rational_torsion_subgroup().multiple_of_order_using_frobp()
             1000
 
             sage: A = J1(23)
-            sage: A.torsion_subgroup().multiple_of_order_using_frobp()
+            sage: A.rational_torsion_subgroup().multiple_of_order_using_frobp()
             9406793
-            sage: A.torsion_subgroup().multiple_of_order_using_frobp(maxp=50)
+            sage: A.rational_torsion_subgroup().multiple_of_order_using_frobp(maxp=50)
             408991
 
             sage: A = J1(19) * J0(21)
-            sage: A.torsion_subgroup().multiple_of_order_using_frobp()
+            sage: A.rational_torsion_subgroup().multiple_of_order_using_frobp()
             35064
 
         The next example illustrates calling this function with a larger
         input and how the result may be cached when maxp is None::
 
-            sage: T = J0(43)[1].torsion_subgroup()
+            sage: T = J0(43)[1].rational_torsion_subgroup()
             sage: T.multiple_of_order_using_frobp()
             14
             sage: T.multiple_of_order_using_frobp(50)
@@ -560,12 +560,12 @@ class RationalTorsionSubgroup(FiniteSubgroup):
 
             sage: A = JH(13,[2]); A
             Abelian variety J0(13) of dimension 0
-            sage: A.torsion_subgroup().multiple_of_order_using_frobp()
+            sage: A.rational_torsion_subgroup().multiple_of_order_using_frobp()
             1
 
             sage: A = JH(15, [2]); A
             Abelian variety JH(15,[2]) of dimension 1
-            sage: A.torsion_subgroup().multiple_of_order_using_frobp()
+            sage: A.rational_torsion_subgroup().multiple_of_order_using_frobp()
             Traceback (most recent call last):
             ...
             NotImplementedError: torsion multiple only implemented for Gamma0 and Gamma1
