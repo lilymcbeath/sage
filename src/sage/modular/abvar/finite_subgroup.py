@@ -132,7 +132,7 @@ class FiniteSubgroup(Module):
     this class itself::
 
         sage: A = J0(37)
-        sage: G = A.n_torsion_subgroup(3); G
+        sage: G = A.torsion_subgroup(3); G
         Finite subgroup with invariants [3, 3, 3, 3] over QQ of Abelian variety J0(37) of dimension 2
         sage: type(G)
         <class 'sage.modular.abvar.finite_subgroup.FiniteSubgroup_lattice_with_category'>
@@ -150,7 +150,7 @@ class FiniteSubgroup(Module):
         TESTS::
 
             sage: A = J0(11)
-            sage: G = A.n_torsion_subgroup(2)
+            sage: G = A.torsion_subgroup(2)
             sage: TestSuite(G).run() # long time
         """
         from sage.categories.category import Category
@@ -232,7 +232,7 @@ class FiniteSubgroup(Module):
         We first compare two subgroups of `J_0(37)`::
 
             sage: A = J0(37)
-            sage: G = A.n_torsion_subgroup(3); G.order()
+            sage: G = A.torsion_subgroup(3); G.order()
             81
             sage: H = A.cuspidal_subgroup(); H.order()
             3
@@ -361,11 +361,11 @@ class FiniteSubgroup(Module):
         EXAMPLES::
 
             sage: E11a0, E11a1, B = J0(33)
-            sage: G = E11a0.n_torsion_subgroup(6); H = E11a0.n_torsion_subgroup(9)
+            sage: G = E11a0.torsion_subgroup(6); H = E11a0.torsion_subgroup(9)
             sage: G.intersection(H)
             Finite subgroup with invariants [3, 3] over QQ of
              Simple abelian subvariety 11a(1,33) of dimension 1 of J0(33)
-            sage: W = E11a1.n_torsion_subgroup(15)
+            sage: W = E11a1.torsion_subgroup(15)
             sage: G.intersection(W)
             Finite subgroup with invariants [] over QQ of
              Simple abelian subvariety 11a(1,33) of dimension 1 of J0(33)
@@ -378,7 +378,7 @@ class FiniteSubgroup(Module):
         ::
 
             sage: E11a0, E11a1, B = J0(33)
-            sage: G = E11a0.n_torsion_subgroup(5); H = E11a1.n_torsion_subgroup(5)
+            sage: G = E11a0.torsion_subgroup(5); H = E11a1.torsion_subgroup(5)
             sage: G.intersection(H)
             Finite subgroup with invariants [5] over QQ of
              Simple abelian subvariety 11a(1,33) of dimension 1 of J0(33)
@@ -463,7 +463,7 @@ class FiniteSubgroup(Module):
             1
             sage: G = H * (1/2); G.order()
             48
-            sage: J.n_torsion_subgroup(2) + H == G
+            sage: J.torsion_subgroup(2) + H == G
             True
             sage: G = H*(3/2); G.order()
             16
@@ -505,7 +505,7 @@ class FiniteSubgroup(Module):
         EXAMPLES::
 
             sage: J = J0(42)
-            sage: G = J.torsion_subgroup(); G
+            sage: G = J.rational_torsion_subgroup(); G
             Torsion subgroup of Abelian variety J0(42) of dimension 5
             sage: G.abelian_variety()
             Abelian variety J0(42) of dimension 5
@@ -521,7 +521,7 @@ class FiniteSubgroup(Module):
         EXAMPLES::
 
             sage: J = J0(42)
-            sage: G = J.torsion_subgroup(); G
+            sage: G = J.rational_torsion_subgroup(); G
             Torsion subgroup of Abelian variety J0(42) of dimension 5
             sage: G.field_of_definition()
             Rational Field
@@ -535,7 +535,7 @@ class FiniteSubgroup(Module):
         EXAMPLES::
 
             sage: J = J0(42)
-            sage: G = J.n_torsion_subgroup(3); G._repr_()
+            sage: G = J.torsion_subgroup(3); G._repr_()
             'Finite subgroup with invariants [3, 3, 3, 3, 3, 3, 3, 3, 3, 3] over QQ of Abelian variety J0(42) of dimension 5'
         """
         K = self.__field_of_definition
@@ -597,7 +597,7 @@ class FiniteSubgroup(Module):
             [[(0, 1/7, 0, 6/7, 0, 5/7)]]
             sage: J1(13).cuspidal_subgroup().gens()
             [[(1/19, 0, 9/19, 9/19)], [(0, 1/19, 0, 9/19)]]
-            sage: J0(22).n_torsion_subgroup(6).gens()
+            sage: J0(22).torsion_subgroup(6).gens()
             [[(1/6, 0, 0, 0)], [(0, 1/6, 0, 0)], [(0, 0, 1/6, 0)], [(0, 0, 0, 1/6)]]
         """
         try:
@@ -616,7 +616,7 @@ class FiniteSubgroup(Module):
         EXAMPLES::
 
             sage: J = J0(23)
-            sage: C = J.n_torsion_subgroup(3)
+            sage: C = J.torsion_subgroup(3)
             sage: C.gens()
             [[(1/3, 0, 0, 0)], [(0, 1/3, 0, 0)], [(0, 0, 1/3, 0)], [(0, 0, 0, 1/3)]]
             sage: C.gen(0)
@@ -647,7 +647,7 @@ class FiniteSubgroup(Module):
         `J_0(23)`::
 
             sage: J = J0(23)
-            sage: G = J.n_torsion_subgroup(11)
+            sage: G = J.torsion_subgroup(11)
             sage: G.invariants()
             [11, 11, 11, 11]
 
@@ -678,7 +678,7 @@ class FiniteSubgroup(Module):
         Finally we attempt to convert some elements that shouldn't
         work, since they are not in `G`::
 
-            sage: G(J.n_torsion_subgroup(3).0)
+            sage: G(J.torsion_subgroup(3).0)
             Traceback (most recent call last):
             ...
             TypeError: element [1/3, 0, 0, 0] is not in free module
@@ -751,7 +751,7 @@ class FiniteSubgroup(Module):
         EXAMPLES::
 
             sage: J = J0(23)
-            sage: G = J.n_torsion_subgroup(11); G
+            sage: G = J.torsion_subgroup(11); G
             Finite subgroup with invariants [11, 11, 11, 11] over QQ of
              Abelian variety J0(23) of dimension 2
 
