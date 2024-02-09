@@ -618,8 +618,9 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
           Defn: Defined on coordinates by sending (x : y : z) to
                 (-1/504*y + 1/2*z : 1/504*y + 1/2*z : 1/84*x)
 
-    Check that this is an abelian group, for :trac:'16184'::
+    Check that this is an abelian group, for :issue:'16184'::
 
+        sage: from sage.groups.group import is_Group
         sage: x = polygen(ZZ, 'x')
         sage: K.<a> = NumberField(x^2 + x - (3^3-3))
         sage: E = EllipticCurve('37a')
@@ -628,7 +629,6 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
         Abelian group of points on
          Elliptic Curve defined by y^2 + y = x^3 + (-1)*x
           over Number Field in a with defining polynomial x^2 + x - 24
-        sage: from sage.groups.group import is_Group
         sage: is_Group(X)
         True
         sage: X.is_abelian()
@@ -640,41 +640,33 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
 
         This is either a positive integer or infinity.
 
-        For an abelian variety, the order is not implemented.
+        For an abelian variety, ``order`` is not implemented.
 
         EXAMPLES::
 
-            sage: from sage.groups.group import Group
-            sage: G = Group()
-            sage: G.order()
+            sage: E = EllipticCurve('37a')
+            sage: E(QQ).order()
             Traceback (most recent call last):
             ...
-            NotImplementedError
-
-        TESTS::
-
-            sage: H = SL(2, QQ)                                                         # needs sage.modules
-            sage: H.order()                                                             # needs sage.modules
-            +Infinity
+            NotImplementedError: order is not implemented for the homset of an abelian variety
         """
-        raise NotImplementedError
+        raise NotImplementedError("order is not implemented for the homset of an abelian variety")
 
     def is_finite(self):
         """
         Returns True if this group is finite.
 
-        For an abelian variety, is_finite is not implemented.
+        For an abelian variety, ``is_finite`` is not implemented.
 
         EXAMPLES::
 
-            sage: from sage.groups.group import Group
-            sage: G = Group()
-            sage: G.is_finite()
+            sage: E = EllipticCurve('37a')
+            sage: E(QQ).is_finite()
             Traceback (most recent call last):
             ...
-            NotImplementedError
+            NotImplementedError: is_finite is not implemented for the homset of an abelian variety
         """
-        raise NotImplementedError
+        raise NotImplementedError("is_finite is not implemented for the homset of an abelian variety")
 
     def is_trivial(self):
         r"""
@@ -683,7 +675,7 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
         A group is trivial, if it consists only of the identity
         element.
 
-        For an abelian variety, is_trivial is not implemented.
+        For an abelian variety, ``is_trivial`` is not implemented.
 
         .. WARNING::
 
@@ -693,22 +685,13 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
 
         EXAMPLES::
 
-            sage: groups.presentation.Cyclic(1).is_trivial()
-            True
-
-            sage: G.<a,b> = FreeGroup('a, b')
-            sage: H = G / (a^2, b^3, a*b*~a*~b)
-            sage: H.is_trivial()
-            False
-
-        A non-trivial presentation of the trivial group::
-
-            sage: F.<a,b> = FreeGroup()
-            sage: J = F / ((~a)*b*a*(~b)^2, (~b)*a*b*(~a)^2)
-            sage: J.is_trivial()
-            True
+            sage: E = EllipticCurve('37a')
+            sage: E(QQ).is_trivial()
+            Traceback (most recent call last):
+            ...
+            NotImplementedError: is_trivial is not implemented for the homset of an abelian variety
         """
-        raise NotImplementedError
+        raise NotImplementedError("is_trivial is not implemented for the homset of an abelian variety")
 
 
     def is_multiplicative(self):
@@ -720,10 +703,9 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
 
         EXAMPLES::
 
-            sage: from sage.groups.group import Group
-            sage: G = Group()
-            sage: G.is_multiplicative()
-            True
+            sage: E = EllipticCurve('37a')
+            sage: E(QQ).is_multiplicative()
+            False
         """
         return False
 
@@ -737,11 +719,13 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
 
         EXAMPLES::
 
-            sage: G = AbelianGroup([2,3,4,5])                                           # needs sage.modules
-            sage: G.an_element()                                                        # needs sage.modules
-            f0*f1*f2*f3
+            sage: E = EllipticCurve('37a')
+            sage: E(QQ).an_element()
+            Traceback (most recent call last):
+            ...
+            NotImplementedError: an_element is not implemented for the homset of an abelian variety
         """
-        raise NotImplementedError
+        raise NotImplementedError("an_element is not implemented for the homset of an abelian variety")
 
     def quotient(self, H, **kwds):
         """
@@ -751,14 +735,12 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
 
         EXAMPLES::
 
-            sage: from sage.groups.group import Group
-            sage: G = Group()
-            sage: G.quotient(G)
+            sage: quotient(E(QQ),E.torsion_subgroup())
             Traceback (most recent call last):
             ...
-            NotImplementedError
+            NotImplementedError: quotient is not implemented for the homset of an abelian variety
         """
-        raise NotImplementedError
+        raise NotImplementedError("quotient is not implemented for the homset of an abelian variety")
 
     def _element_constructor_(self, *v, **kwds):
         """
