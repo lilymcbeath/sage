@@ -276,6 +276,8 @@ lazy_import('sage.combinat.finite_state_machine_generators',
 # Sequences
 lazy_import('sage.combinat.binary_recurrence_sequences',
             'BinaryRecurrenceSequence')
+lazy_import('sage.combinat.linear_recurrence_sequences',
+            'LinearRecurrenceSequence')
 lazy_import('sage.combinat.recognizable_series', 'RecognizableSeriesSpace')
 lazy_import('sage.combinat.regular_sequence', 'RegularSequenceRing')
 
