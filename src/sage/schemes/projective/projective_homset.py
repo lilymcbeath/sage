@@ -25,6 +25,8 @@ AUTHORS:
 - Ben Hutz (June 2012): added support for projective ring
 
 - Ben Hutz (2018): add numerical point support
+
+- Lily McBeath (2024): address :issue:`16184`
 """
 
 # *****************************************************************************
