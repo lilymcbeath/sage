@@ -674,7 +674,7 @@ class SchemeHomset_points_abelian_variety_field(SchemeHomset_points_projective_f
         r"""
         Return ``True`` if this group is the trivial group.
 
-        A group is trivial, if it consists only of the identity
+        A group is trivial if it consists only of the identity
         element.
 
         For an abelian variety, ``is_trivial`` is not implemented.
