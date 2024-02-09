@@ -6,6 +6,8 @@ AUTHORS:
 
 - William Stein (2007-03)
 
+- Lily McBeath (2024): address :issue:`31934`
+
 TESTS::
 
     sage: A = J0(33)
