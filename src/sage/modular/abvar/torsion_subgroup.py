@@ -15,6 +15,8 @@ AUTHORS:
 
 - William Stein (2007-03)
 
+- Lily McBeath (2024): address :issue:`8777`
+
 EXAMPLES: First we consider `J_0(50)` where everything
 works out nicely::
 
