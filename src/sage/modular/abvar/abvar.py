@@ -6,6 +6,8 @@ AUTHORS:
 
 - William Stein (2007-03)
 
+- Lily McBeath (2024): address :issue:`8777`
+
 TESTS::
 
     sage: A = J0(33)
@@ -3141,7 +3143,34 @@ class ModularAbelianVariety_abstract(Parent):
         return FiniteSubgroup_lattice(
             self, X, field_of_definition=field_of_definition, check=check)
 
-    def torsion_subgroup(self, n):
+    def torsion_subgroup(self, n=None):
+        """
+        This is a wrapper function for `rational_torsion_subgroup` and `n_torsion_subgroup`.
+        Return the former if `n` is `None`, otherwise return the `n`-torsion subgroup.
+
+        EXAMPLES::
+
+            sage: A = J0(37)
+            sage: A.torsion_subgroup()
+            Torsion subgroup of Abelian variety J0(37) of dimension 2
+            sage: A.torsion_subgroup(5)
+            Finite subgroup with invariants [5, 5, 5, 5] over QQ of Abelian variety J0(37) of dimension 2
+
+        TESTS:
+
+        Addressed the comment in :issue:`8777`::
+
+            sage: A = J0(11)
+            sage: A.torsion_subgroup()
+            Torsion subgroup of Abelian variety J0(11) of dimension 1
+            sage: A.torsion_subgroup(5)
+            Finite subgroup with invariants [5, 5] over QQ of Abelian variety J0(11) of dimension 1
+        """
+        if n is None:
+            return self.rational_torsion_subgroup()
+        return self.n_torsion_subgroup(n)
+
+    def n_torsion_subgroup(self, n):
         """
         If n is an integer, return the subgroup of points of order n.
         Return the `n`-torsion subgroup of elements of order
@@ -3150,20 +3179,20 @@ class ModularAbelianVariety_abstract(Parent):
 
         EXAMPLES::
 
-            sage: J1(13).torsion_subgroup(19)
+            sage: J1(13).n_torsion_subgroup(19)
             Finite subgroup with invariants [19, 19, 19, 19] over QQ of Abelian variety J1(13) of dimension 2
 
         ::
 
             sage: A = J0(23)
-            sage: G = A.torsion_subgroup(5); G
+            sage: G = A.n_torsion_subgroup(5); G
             Finite subgroup with invariants [5, 5, 5, 5] over QQ of Abelian variety J0(23) of dimension 2
             sage: G.order()
             625
             sage: G.gens()
             [[(1/5, 0, 0, 0)], [(0, 1/5, 0, 0)], [(0, 0, 1/5, 0)], [(0, 0, 0, 1/5)]]
             sage: A = J0(23)
-            sage: A.torsion_subgroup(2).order()
+            sage: A.n_torsion_subgroup(2).order()
             16
         """
         try:
