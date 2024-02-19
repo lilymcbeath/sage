@@ -14,10 +14,14 @@ EXAMPLES::
     sage: P(100)        #the 100th term of the Pentanacci sequence
     8196759338261258264777004033
 
+    sage: Fib = BinaryRecurrenceSequence(1,1,0,1)
+    sage: Fib.charpoly()
+    x^2-x-1
+
 
 AUTHORS:
 
-- Lily McBeath and Mckenzie West(2024): LinearRecurrenceSequence
+- Lily McBeath and Mckenzie West (2024): LinearRecurrenceSequence
 
 - Isabel Vogt (2013): initial version of binary_recurrence_sequences.py
 
@@ -76,13 +80,43 @@ class LinearRecurrenceSequence(SageObject):
 
     """
 
-    def __init__(self, initial_conditions, coefficients):
+    def __new__(cls, *args, **kwargs):
+
+        num_args = len(args)
+
+        if len({type(a) for a in args}) != 1:
+            raise ValueError("All arguments must be of the same type")
+
+        if num_args == 2:
+            x = args[0]
+            y = args[1]
+            u0 = kwargs["u0"] if "u0" in kwargs else 0
+            u1  = kwargs["u1"] if "u1" in kwargs else 1
+        elif num_args % 2 != 0:
+            raise ValueError("Number of initial conditions must equal number of coefficients.")
+        else:
+            kwargs["coefficients"] = args[:num_args//2]
+            kwargs["initial_conditions"] = args[num_args//2:]
+
+        if "coefficients" in kwargs:
+            x = kwargs["coefficients"]
+        if "initial_conditions" in kwargs:
+            y = kwargs["initial_conditions"]
+
+        if x in Integers() and y in Integers():
+            return SageObject.__new__(BinaryRecurrenceSequence,x,y,u0,u1)
+        elif len(x) == 2 and len(y) == 2:
+            return SageObject.__new__(BinaryRecurrenceSequence,x[0],x[1],y[0],y[1])
+        else:
+            return SageObject.__new__(LinearRecurrenceSequence,args,kwargs)
+
+    def __init__(self, coefficients, initial_conditions=None, *args,**kwargs):
         """
         See :class:`LinearRecurrenceSequence` for full documentation.
 
         EXAMPLES::
 
-            sage: R = LinearRecurrenceSequence([0,1,2],[-2,1,2])
+            sage: R = LinearRecurrenceSequence([-2,1,2],[0,1,2])
             sage: R
             Linear recurrence sequence defined by: u_{n+3} = -2*u_{n+2} + 1*u_{n+1} + 2*u_{n+0};
             With initial conditions: u_0 = 0, u_1 = 1, u_2 = 2
@@ -100,25 +134,22 @@ class LinearRecurrenceSequence(SageObject):
             Traceback (most recent call last):
             ...
             NotImplementedError: not implemented for order d < 2
-            
-        For Binary recurrence sequences, use ``BinaryRecurrenceSequence``::
-
-            sage: T = LinearRecurrenceSequence([0,1],[1,1])
-            Traceback (most recent call last):
-            ...
-            NotImplementedError: use BinaryRecurrenceSequence for recurrence sequences of order 2
 
         """
+        if len(args) > 0:
+            args = [coefficients,initial_conditions] + list(args)
+            if not all(x in Integers() for x in args):
+                raise ValueError("LinearRecurrenceSequence either requires two lists or a sequence of integers")
+            else:
+                coefficients = args[:len(args)//2]
+                initial_conditions = args[len(args)//2:]
         self.initial_conditions = initial_conditions
         self.coefficients = coefficients
-        self.degree = len(initial_conditions)
+        self.degree = len(coefficients)
         if len(initial_conditions) != len(coefficients):
             raise ValueError("length of initial conditions list must match length of definition list a")
-        elif self.degree == 1:
+        elif self.degree <= 1:
             raise NotImplementedError("not implemented for order degree < 2")
-        #elif self.degree == 2:
-        #    self = BinaryRecurrenceSequence(initial_conditions[0],initial_conditions[1],coefficients[0],coefficients[1])
-            #raise NotImplementedError("use BinaryRecurrenceSequence for recurrence sequences of order 2")
 
     def __repr__(self):
         """
@@ -199,6 +230,8 @@ class LinearRecurrenceSequence(SageObject):
         R = PolynomialRing(Integers(),'x')
         charpoly = R([-c for c in reversed(self.coefficients)]+[1])
         return charpoly
+
+    charpoly = characteristic_polynomial
 
     def minimal_polynomial(self):
         """
