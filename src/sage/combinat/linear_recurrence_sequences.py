@@ -90,27 +90,24 @@ class LinearRecurrenceSequence(SageObject):
         if num_args == 2:
             x = args[0]
             y = args[1]
-            u0 = kwargs["u0"] if "u0" in kwargs else 0
-            u1  = kwargs["u1"] if "u1" in kwargs else 1
+            if args[0] in Integers():
+                u_0 = kwargs["u0"] if "u0" in kwargs else 0
+                u_1  = kwargs["u1"] if "u1" in kwargs else 1
+                
         elif num_args % 2 != 0:
             raise ValueError("Number of initial conditions must equal number of coefficients.")
         else:
-            kwargs["coefficients"] = args[:num_args//2]
-            kwargs["initial_conditions"] = args[num_args//2:]
-
-        if "coefficients" in kwargs:
-            x = kwargs["coefficients"]
-        if "initial_conditions" in kwargs:
-            y = kwargs["initial_conditions"]
+            x = args[:num_args//2]
+            y = args[num_args//2:]
 
         if x in Integers() and y in Integers():
-            return SageObject.__new__(BinaryRecurrenceSequence,x,y,u0,u1)
+            return SageObject.__new__(BinaryRecurrenceSequence,x,y,u_0,u_1)
         elif len(x) == 2 and len(y) == 2:
             return SageObject.__new__(BinaryRecurrenceSequence,x[0],x[1],y[0],y[1])
         else:
             return SageObject.__new__(LinearRecurrenceSequence,args,kwargs)
 
-    def __init__(self, coefficients, initial_conditions=None, *args,**kwargs):
+    def __init__(self, coefficients, initial_conditions, *args, **kwargs):
         """
         See :class:`LinearRecurrenceSequence` for full documentation.
 
@@ -299,7 +296,7 @@ class BinaryRecurrenceSequence(LinearRecurrenceSequence):
 
     """
 
-    def __init__(self, b, c, u0=0, u1=1):
+    def __init__(self, b, c, u0=0, u1=1, *args, **kwargs):
         """
         See :class:`BinaryRecurrenceSequence` for full documentation.
 
@@ -315,11 +312,17 @@ class BinaryRecurrenceSequence(LinearRecurrenceSequence):
             True
 
         """
-        super().__init__([u0,u1], [b,c])
-        self.b = b
-        self.c = c
-        self.u0 = u0
-        self.u1 = u1
+        super().__init__([b,c],[u0,u1])
+        if b in Integers():
+            self.b = b
+            self.c = c
+            self.u0 = u0
+            self.u1 = u1
+        else:
+            self.u0 = c[0]
+            self.u1 = c[1] 
+            self.c = b[1]
+            self.b = b[0]
         self._period_dict = {}  # dictionary to cache the period of a sequence for future lookup
         self._PGoodness = {}  # dictionary to cache primes that are "good" by some prime power
         self._ell = 1  # variable that keeps track of the last prime power to be used as a goodness
